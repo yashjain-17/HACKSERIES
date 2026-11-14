@@ -1,29 +1,78 @@
 # HACKSERIES
 
-A frontend repository for the HackSeries event website and related interface work.
+A multi-part learning and event-web workspace containing React/Vite projects and a small Flask API exercise.
 
-## About
+## Repository layout
 
-This repository contains the web experience for HackSeries. Use the source files in this repository as the reference for the implemented pages, components, and event information.
+- `react/` — React + Vite application
+- `Props/` — separate React + Vite application
+- `hackseries-flask/` — Flask API practice application
+- `.gitignore` — repository ignore rules
 
-## Getting started
+Each frontend folder has its own `package.json`. Install dependencies from the folder you intend to run, not from the repository root.
 
-The exact setup depends on the package manager and scripts defined in the project. From the repository root:
+## Run the React application
+
+Choose one frontend:
 
 ```bash
+cd react
 npm install
 npm run dev
 ```
 
-If these scripts are not available, check `package.json` and use the scripts declared there.
+Or:
 
-## Development
+```bash
+cd Props
+npm install
+npm run dev
+```
 
-- Keep event details and registration information accurate.
-- Test responsive layouts on mobile and desktop.
-- Check navigation, forms, and external links before deployment.
-- Keep dependencies and setup instructions documented.
+Both frontend projects define `dev`, `build`, `lint`, and `preview` scripts. Run checks from the selected folder:
+
+```bash
+npm run build
+npm run lint
+```
+
+## Run the Flask practice API
+
+```bash
+cd hackseries-flask
+python -m venv .venv
+```
+
+Activate the environment, then install Flask:
+
+```powershell
+# Windows PowerShell
+.\.venv\Scripts\Activate.ps1
+```
+
+```bash
+# macOS / Linux
+source .venv/bin/activate
+```
+
+```bash
+pip install Flask
+python app.py
+```
+
+The API is configured to run locally on Flask's default development port. The current routes include `/`, `/test`, `/notes`, and `/addnote`.
+
+## Known issue in Flask exercise
+
+The `/user` function currently uses `app.route("/user")` without the decorator marker `@`. It is therefore not registered as a Flask route. Also, `debug=True` is for local development only and must not be used in a public deployment.
+
+## Development checklist
+
+- Confirm which of the two frontend folders is the intended event site before deploying.
+- Test responsive behavior and navigation.
+- Verify event dates, registration links, and contact details.
+- Keep API behavior and frontend integration documented.
 
 ## Contributing
 
-Use focused commits and update this README when setup commands, features, or deployment details change.
+See [CONTRIBUTING.md](CONTRIBUTING.md).
