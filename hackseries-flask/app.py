@@ -1,64 +1,65 @@
-from flask import Flask, jsonify,request
+import os
 
-    #Creating flask app instance 
+from flask import Flask, jsonify, request
+
 app = Flask(__name__)
 
+# In-memory storage is intentionally for this learning exercise only.
+notes = []
 
-    # jsonify() converts Python data into a proper JSON HTTP response with correct headers and formatting.
-@app.route("/")
+
+@app.get("/")
 def home():
-        return jsonify({
-            "message":"Api is running"
-        })
-@app.route("/test")
+    return jsonify({"message": "API is running"})
+
+
+@app.get("/test")
 def test():
-        return jsonify({
-            "message":"The test is working."
-        })
+    return jsonify({"message": "The test is working."})
 
-app.route("/user")
+
+@app.get("/user")
 def user():
-        return jsonify({
-            "name":"Sujal",
-            "role":"Developer"
-        })
+    return jsonify({"name": "Sujal", "role": "Developer"})
 
-    #fake database
-notes=[]
 
-@app.route("/notes",methods=["GET"])
+@app.get("/notes")
 def get_notes():
-        return jsonify(notes)
+    return jsonify(notes)
 
-    #import "request" from flask
-@app.route("/addnote",methods=["POST"])
+
+@app.post("/addnote")
 def add_note():
-        data = request.json
-        notes.append(data)
-        return jsonify({"message":"Note added Successfully"}),201
+    data = request.get_json(silent=True)
+    if not isinstance(data, dict) or not data:
+        return jsonify({"error": "Request body must be a non-empty JSON object."}), 400
 
-    #PUT request - update the database 
-@app.route("/notes/<int:index>",methods=["PUT"])
-def update(index):
-        data = request.json
-
-        if(index<len(notes)):
-            notes[index]=data
-            return jsonify({"message":"Note updated"}),200
-    
-        return jsonify({"erro":"Invalid index"}),400
+    notes.append(data)
+    return jsonify({"message": "Note added successfully", "note": data}), 201
 
 
-    #DELETE - To delete the data 
-@app.route("/notes/<int:index>",methods=["DELETE"])
+@app.put("/notes/<int:index>")
+def update_note(index):
+    if not 0 <= index < len(notes):
+        return jsonify({"error": "Invalid note index."}), 404
+
+    data = request.get_json(silent=True)
+    if not isinstance(data, dict) or not data:
+        return jsonify({"error": "Request body must be a non-empty JSON object."}), 400
+
+    notes[index] = data
+    return jsonify({"message": "Note updated", "note": data}), 200
+
+
+@app.delete("/notes/<int:index>")
 def delete_note(index):
-        if(index<len(notes)):
-            notes.pop(index)
-            return jsonify({"message":"Note deleted successfully"}),200
-    
-        return jsonify({"error":"Ivalid Index"}),400 
+    if not 0 <= index < len(notes):
+        return jsonify({"error": "Invalid note index."}), 404
+
+    notes.pop(index)
+    return jsonify({"message": "Note deleted successfully"}), 200
 
 
-    #Ensusers the flask app runs only when the file is executed directly not when imported
 if __name__ == "__main__":
-   app.run(debug=True)
+    # Enable the debugger only when explicitly requested in a local environment.
+    app.run(debug=os.getenv("FLASK_DEBUG") == "1")
