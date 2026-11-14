@@ -56,15 +56,21 @@ source .venv/bin/activate
 ```
 
 ```bash
-pip install Flask
+pip install -r requirements.txt
 python app.py
 ```
 
-The API is configured to run locally on Flask's default development port. The current routes include `/`, `/test`, `/notes`, and `/addnote`.
+The API binds to localhost by default. Available routes include `/`, `/test`, `/user`, `/notes`, and `/addnote`. Note data is stored in memory and is cleared when the process restarts.
 
-## Known issue in Flask exercise
+## Flask API regression tests
 
-The `/user` function currently uses `app.route("/user")` without the decorator marker `@`. It is therefore not registered as a Flask route. Also, `debug=True` is for local development only and must not be used in a public deployment.
+Run the API tests from the repository root:
+
+```bash
+python -m unittest discover -s hackseries-flask -p "test_*.py" -v
+```
+
+The tests cover route registration, note creation, reading, updating, deletion, and invalid request handling. The Flask API is a learning exercise with in-memory storage, not a production persistence layer.
 
 ## Development checklist
 
