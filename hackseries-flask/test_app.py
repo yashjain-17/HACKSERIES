@@ -50,6 +50,15 @@ class NotesApiTests(unittest.TestCase):
             404,
         )
 
+    def test_note_collection_has_a_bounded_capacity(self):
+        notes.extend({"title": str(index)} for index in range(1000))
+
+        response = self.client.post("/addnote", json={"title": "one too many"})
+
+        self.assertEqual(response.status_code, 429)
+        self.assertEqual(len(notes), 1000)
+        self.assertIn("limit", response.get_json()["error"])
+
     def test_oversized_request_body_returns_json_413(self):
         response = self.client.post(
             "/addnote",
