@@ -3,6 +3,14 @@ import os
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
+# Keep this in-memory learning API bounded against oversized request bodies.
+app.config["MAX_CONTENT_LENGTH"] = 16 * 1024
+
+
+@app.errorhandler(413)
+def request_too_large(_error):
+    return jsonify({"error": "Request body exceeds the 16 KiB limit."}), 413
+
 
 # In-memory storage is intentionally for this learning exercise only.
 notes = []
