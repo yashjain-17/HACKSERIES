@@ -50,6 +50,15 @@ class NotesApiTests(unittest.TestCase):
             404,
         )
 
+    def test_oversized_request_body_returns_json_413(self):
+        response = self.client.post(
+            "/addnote",
+            data='{"title":"' + ("x" * (17 * 1024)) + '"}',
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 413)
+        self.assertIn("16 KiB limit", response.get_json()["error"])
+
     def test_invalid_indexes_are_rejected(self):
         self.assertEqual(self.client.put("/notes/-1", json={"title": "bad"}).status_code, 404)
         self.assertEqual(self.client.delete("/notes/5").status_code, 404)
