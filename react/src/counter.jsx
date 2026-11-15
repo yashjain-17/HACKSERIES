@@ -1,16 +1,16 @@
-Counter.jsx ;
-import React from "react";
-const Counter = ({counter , addNumber , removeNumber}) => {
+function Counter({ counter, addNumber, removeNumber }) {
   return (
-    <>
-    <h2>Counter value : {counter}</h2>
-    <button onClick={addNumber}>Add Number</button>
+    <section aria-label="Counter controls">
+      <h2>Counter value: {counter}</h2>
+      <button type="button" onClick={addNumber}>
+        Add one
+      </button>
+      <button type="button" onClick={removeNumber}>
+        Remove one
+      </button>
+      <p>Current value: {counter}</p>
+    </section>
+  );
+}
 
-    <br />
-    <button onClick={removeNumber}>Remove Number {counter}</button>
-
-    <p>footer : {counter}</p>
-    </>
-  )
-    }
-    export default Counter;
+export default Counter;
