@@ -42,6 +42,9 @@ def add_note():
     if not isinstance(data, dict) or not data:
         return jsonify({"error": "Request body must be a non-empty JSON object."}), 400
 
+    if len(notes) >= 1000:
+        return jsonify({"error": "The in-memory note limit has been reached."}), 429
+
     notes.append(data)
     return jsonify({"message": "Note added successfully", "note": data}), 201
 
