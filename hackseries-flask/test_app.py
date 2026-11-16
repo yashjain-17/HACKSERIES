@@ -50,6 +50,27 @@ class NotesApiTests(unittest.TestCase):
             404,
         )
 
+    def test_note_writes_reject_non_json_content_types(self):
+        create_response = self.client.post(
+            "/addnote",
+            data='{"title":"Unsupported"}',
+            content_type="text/plain",
+        )
+        self.assertEqual(create_response.status_code, 415)
+        self.assertEqual(
+            create_response.get_json()["error"],
+            "Content-Type must be application/json.",
+        )
+
+        notes.append({"title": "Existing"})
+        update_response = self.client.put(
+            "/notes/0",
+            data='{"title":"Unsupported"}',
+            content_type="text/plain",
+        )
+        self.assertEqual(update_response.status_code, 415)
+        self.assertEqual(notes, [{"title": "Existing"}])
+
     def test_note_collection_has_a_bounded_capacity(self):
         notes.extend({"title": str(index)} for index in range(1000))
 
