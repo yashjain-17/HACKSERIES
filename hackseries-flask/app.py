@@ -38,6 +38,9 @@ def get_notes():
 
 @app.post("/addnote")
 def add_note():
+    if not request.is_json:
+        return jsonify({"error": "Content-Type must be application/json."}), 415
+
     data = request.get_json(silent=True)
     if not isinstance(data, dict) or not data:
         return jsonify({"error": "Request body must be a non-empty JSON object."}), 400
@@ -53,6 +56,9 @@ def add_note():
 def update_note(index):
     if not 0 <= index < len(notes):
         return jsonify({"error": "Invalid note index."}), 404
+
+    if not request.is_json:
+        return jsonify({"error": "Content-Type must be application/json."}), 415
 
     data = request.get_json(silent=True)
     if not isinstance(data, dict) or not data:
