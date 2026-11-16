@@ -74,7 +74,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-The API binds to localhost by default. Available routes include `/`, `/test`, `/user`, `/notes`, and `/addnote`. Note data is stored in memory and is cleared when the process restarts.
+The API binds to localhost by default. Available routes include `/`, `/test`, `/user`, `/notes`, and `/addnote`. Note data is stored in memory and is cleared when the process restarts. JSON write requests are limited to 16 KiB, and the in-memory collection accepts at most 1,000 notes; excess creates return HTTP 429.
 
 ## Flask API regression tests
 
