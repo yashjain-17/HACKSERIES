@@ -11,6 +11,20 @@ A multi-part learning and event-web workspace containing React/Vite projects and
 
 Each frontend folder has its own `package.json`. Install dependencies from the folder you intend to run, not from the repository root.
 
+## Prerequisites
+
+- Node.js 20.19+ or 22.12+ (required by the Vite 8 toolchain used by both frontends)
+- npm compatible with the installed Node.js release
+- Python 3.10+ for the Flask learning API
+
+Check your local versions before installing dependencies:
+
+```bash
+node --version
+npm --version
+python --version
+```
+
 ## Run the React application
 
 Choose one frontend:
