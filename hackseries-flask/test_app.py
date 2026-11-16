@@ -71,6 +71,20 @@ class NotesApiTests(unittest.TestCase):
         self.assertEqual(update_response.status_code, 415)
         self.assertEqual(notes, [{"title": "Existing"}])
 
+    def test_update_rejects_non_object_and_malformed_json(self):
+        notes.append({"title": "Original"})
+
+        non_object = self.client.put("/notes/0", json=["not", "an", "object"])
+        malformed = self.client.put(
+            "/notes/0",
+            data="{",
+            content_type="application/json",
+        )
+
+        self.assertEqual(non_object.status_code, 400)
+        self.assertEqual(malformed.status_code, 400)
+        self.assertEqual(notes, [{"title": "Original"}])
+
     def test_note_collection_has_a_bounded_capacity(self):
         notes.extend({"title": str(index)} for index in range(1000))
 
